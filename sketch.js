@@ -11,6 +11,8 @@ let wallY = []
 let puntaje = 0;
 let puntajeMax = 0;
 let recordAnterior = 0;
+let musicaRecord;
+let musicaFondo;
 
 function preload() {
   // put preload code here
@@ -20,6 +22,9 @@ function preload() {
   imagenInicio = loadImage('./images/fondoinicio00.jfif');
   personaje = loadImage('./images/bird.png');
   pared = loadImage('./images/pared.png');
+  musicaRecord = loadSound('./sounds/aplauso.wav');
+  musicaJuego = loadSound('./sounds/musicafondo.mp3');
+  
 }
 
 function setup() {
@@ -61,24 +66,37 @@ function draw() {
         puntajeMax = max(puntaje, puntajeMax);
       }
       wallX[i] = wallX[i] - 5; // Para que se muevan los obstáculos
+
+      // Colisiones
+      if (posY < -60 || posY > height + 60
+        || (abs(wallX[i]-100) < 60 
+        && abs+(wallY[i] - posY) > 100)) {
+        musicaJuego.stop();
+        estado = 0;
+      }
     }
 
     // Personaje
     image(personaje, 100, posY, 60, 60);
     text("Puntaje: " + puntaje, width/2-60, 30);
   } else if (estado === 0) {
+    background(0);
+    imageMode(CORNER);
     cursor();
-    image(imagenInicio, 0, 0, 850, 600);
+    image(imagenInicio, 0, 0, 1000, 600);
     textSize(40);
     fill(255);
-    text("Puntaje Máximo: ", 300, 100);
+    text("Puntaje Máximo: " + puntajeMax, 300, 100);
     text("Haga clic para comenzar", 300, 200);
     textSize(20);
-    text("ola hannia ❤", 200, 200);
+    text("ola hannia ❤", 200, 500);
+
+      if (puntajeMax > recordAnterior) {
+        if (!musicaRecord.isPlaying()) {
+          musicaRecord.play();
+      } 
+    }
   }
-
-
-
 }
 
 function mousePressed() {
@@ -94,8 +112,14 @@ function mousePressed() {
     wallY[2] = random(200, 300)
     puntaje = 0;
     recordAnterior = puntajeMax;
-
     noCursor();
+
+    if (musicaRecord.isPlaying()) {
+      musicaRecord.stop();
+    }
+
+    musicaJuego.loop();
+
   }
   dY  = -15;
 }
