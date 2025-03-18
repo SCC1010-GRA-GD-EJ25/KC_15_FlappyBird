@@ -13,6 +13,7 @@ let puntajeMax = 0;
 let recordAnterior = 0;
 let musicaRecord;
 let musicaFondo;
+let fuente;
 
 function preload() {
   // put preload code here
@@ -24,13 +25,14 @@ function preload() {
   pared = loadImage('./images/pared.png');
   musicaRecord = loadSound('./sounds/aplauso.wav');
   musicaJuego = loadSound('./sounds/musicafondo.mp3');
-  
+  fuente = loadFont('./fonts/tommy.otf');
 }
 
 function setup() {
   // put setup code here
   createCanvas(1000,512)
   noCursor();
+  textFont(fuente);
 
 }
 
